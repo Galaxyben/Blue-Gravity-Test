@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public float rotationSpeed = 180f; // Adjust this to control rotation speed
 
     private Rigidbody2D rb;
     private Vector2 movementInput;
@@ -41,5 +42,18 @@ public class PlayerController : MonoBehaviour
 
         // Apply the calculated velocity to the Rigidbody
         rb.velocity = movementVelocity;
+
+        // Rotate the sprite towards movement direction
+        RotateSprite();
+    }
+
+    private void RotateSprite()
+    {
+        if (movementInput != Vector2.zero)
+        {
+            float targetRotation = Mathf.Atan2(0, movementInput.x) * Mathf.Rad2Deg;
+            Quaternion targetQuaternion = Quaternion.Euler(0f, targetRotation, 0f);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetQuaternion, rotationSpeed);
+        }
     }
 }
